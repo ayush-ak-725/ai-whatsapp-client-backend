@@ -77,3 +77,4 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
     long countByIsActiveTrue();
 }
 
+

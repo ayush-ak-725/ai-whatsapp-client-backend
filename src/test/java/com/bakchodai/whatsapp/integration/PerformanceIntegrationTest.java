@@ -164,8 +164,8 @@ public class PerformanceIntegrationTest {
         List<Character> allCharacters = characterRepository.findByIsActiveTrue();
         
         // Query messages with pagination
-        List<Message> messages = messageRepository.findByGroupIdOrderByTimestampDesc(
-                allGroups.get(0).getId(), PageRequest.of(0, 20));
+        List<Message> messages = messageRepository.findRecentMessagesByGroupIdWithLimit(
+                allGroups.get(0).getId(), 20);
         
         long endTime = System.currentTimeMillis();
         long queryTime = endTime - startTime;
@@ -214,8 +214,8 @@ public class PerformanceIntegrationTest {
         assertTrue(totalTime < 15000, "Concurrent message creation should complete within 15 seconds");
         
         // Verify all messages were created
-        List<Message> allMessages = messageRepository.findByGroupIdOrderByTimestampDesc(
-                group.getId(), PageRequest.of(0, 1000));
+        List<Message> allMessages = messageRepository.findRecentMessagesByGroupIdWithLimit(
+                group.getId(), 1000);
         assertTrue(allMessages.size() >= numberOfThreads * messagesPerThread);
         
         executor.shutdown();
@@ -248,8 +248,8 @@ public class PerformanceIntegrationTest {
         assertTrue(totalTime < 10000, "Conversation should complete within 10 seconds");
         
         // Verify messages were created
-        List<Message> messages = messageRepository.findByGroupIdOrderByTimestampDesc(
-                group.getId(), PageRequest.of(0, 100));
+        List<Message> messages = messageRepository.findRecentMessagesByGroupIdWithLimit(
+                group.getId(), 100);
         assertFalse(messages.isEmpty());
     }
     
@@ -399,4 +399,6 @@ public class PerformanceIntegrationTest {
         return response;
     }
 }
+
+
 

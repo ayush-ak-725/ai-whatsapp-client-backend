@@ -94,3 +94,4 @@ public interface CharacterRepository extends JpaRepository<Character, UUID> {
     Optional<Character> findByIdWithGroupMemberships(@Param("characterId") UUID characterId);
 }
 
+

@@ -96,8 +96,7 @@ public class ConversationEngineIntegrationTest {
         assertTrue(conversationEngine.isConversationActive(testGroup.getId()));
         
         // Verify messages were created
-        List<Message> messages = messageRepository.findByGroupIdOrderByTimestampDesc(testGroup.getId(), 
-                org.springframework.data.domain.PageRequest.of(0, 10));
+        List<Message> messages = messageRepository.findRecentMessagesByGroupIdWithLimit(testGroup.getId(), 10);
         assertFalse(messages.isEmpty());
         
         // Verify messages are from AI characters
@@ -132,8 +131,7 @@ public class ConversationEngineIntegrationTest {
         Thread.sleep(2000);
         
         // Then
-        List<Message> messages = messageRepository.findByGroupIdOrderByTimestampDesc(testGroup.getId(),
-                org.springframework.data.domain.PageRequest.of(0, 10));
+        List<Message> messages = messageRepository.findRecentMessagesByGroupIdWithLimit(testGroup.getId(), 10);
         assertFalse(messages.isEmpty());
         
         // Verify message content
@@ -150,8 +148,7 @@ public class ConversationEngineIntegrationTest {
         Thread.sleep(3000); // Let multiple turns process
         
         // When
-        List<Message> messages = messageRepository.findByGroupIdOrderByTimestampDesc(testGroup.getId(),
-                org.springframework.data.domain.PageRequest.of(0, 20));
+        List<Message> messages = messageRepository.findRecentMessagesByGroupIdWithLimit(testGroup.getId(), 20);
         
         // Then
         assertFalse(messages.isEmpty());
@@ -240,8 +237,7 @@ public class ConversationEngineIntegrationTest {
         Thread.sleep(2000);
         
         // When
-        List<Message> messages = messageRepository.findByGroupIdOrderByTimestampDesc(testGroup.getId(),
-                org.springframework.data.domain.PageRequest.of(0, 10));
+        List<Message> messages = messageRepository.findRecentMessagesByGroupIdWithLimit(testGroup.getId(), 10);
         
         // Then
         assertFalse(messages.isEmpty());
@@ -263,8 +259,7 @@ public class ConversationEngineIntegrationTest {
         Thread.sleep(2000);
         
         // When
-        List<Message> messages = messageRepository.findByGroupIdOrderByTimestampDesc(testGroup.getId(),
-                org.springframework.data.domain.PageRequest.of(0, 10));
+        List<Message> messages = messageRepository.findRecentMessagesByGroupIdWithLimit(testGroup.getId(), 10);
         
         // Then
         assertFalse(messages.isEmpty());
@@ -286,8 +281,7 @@ public class ConversationEngineIntegrationTest {
         Thread.sleep(2000);
         
         // When
-        List<Message> messages = messageRepository.findByGroupIdOrderByTimestampDesc(testGroup.getId(),
-                org.springframework.data.domain.PageRequest.of(0, 10));
+        List<Message> messages = messageRepository.findRecentMessagesByGroupIdWithLimit(testGroup.getId(), 10);
         
         // Then
         assertFalse(messages.isEmpty());
@@ -326,4 +320,6 @@ public class ConversationEngineIntegrationTest {
         return groupRepository.save(group);
     }
 }
+
+
 

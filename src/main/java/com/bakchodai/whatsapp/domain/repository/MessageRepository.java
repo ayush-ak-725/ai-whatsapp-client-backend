@@ -33,11 +33,21 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
      * Find recent messages by group ID
      * 
      * @param groupId Group ID
-     * @param limit Maximum number of messages
+     * @param pageable Pagination information
      * @return List of recent messages
      */
     @Query("SELECT m FROM Message m WHERE m.group.id = :groupId ORDER BY m.timestamp DESC")
     List<Message> findRecentMessagesByGroupId(@Param("groupId") UUID groupId, Pageable pageable);
+    
+    /**
+     * Find recent messages by group ID with limit
+     * 
+     * @param groupId Group ID
+     * @param limit Maximum number of messages
+     * @return List of recent messages
+     */
+    @Query(value = "SELECT * FROM messages WHERE group_id = :groupId ORDER BY timestamp DESC LIMIT :limit", nativeQuery = true)
+    List<Message> findRecentMessagesByGroupIdWithLimit(@Param("groupId") UUID groupId, @Param("limit") int limit);
     
     /**
      * Find messages by group and character
@@ -47,7 +57,8 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
      * @param pageable Pagination information
      * @return Page of messages from the character in the group
      */
-    Page<Message> findByGroupIdAndCharacterIdOrderByTimestampDesc(UUID groupId, UUID characterId, Pageable pageable);
+    @Query("SELECT m FROM Message m WHERE m.group.id = :groupId AND m.character.id = :characterId ORDER BY m.timestamp DESC")
+    Page<Message> findByGroupIdAndCharacterIdOrderByTimestampDesc(@Param("groupId") UUID groupId, @Param("characterId") UUID characterId, Pageable pageable);
     
     /**
      * Find messages by group within a time range
@@ -83,7 +94,8 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
      * @param characterId Character ID
      * @return Number of messages from the character in the group
      */
-    long countByGroupIdAndCharacterId(UUID groupId, UUID characterId);
+    @Query("SELECT COUNT(m) FROM Message m WHERE m.group.id = :groupId AND m.character.id = :characterId")
+    long countByGroupIdAndCharacterId(@Param("groupId") UUID groupId, @Param("characterId") UUID characterId);
     
     /**
      * Find messages containing specific text
@@ -123,4 +135,5 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
      */
     long deleteByTimestampBefore(LocalDateTime cutoffDate);
 }
+
 

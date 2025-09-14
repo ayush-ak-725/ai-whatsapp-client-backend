@@ -92,6 +92,10 @@ public class Message {
         this.character = character;
     }
     
+    public UUID getCharacterId() {
+        return character != null ? character.getId() : null;
+    }
+    
     public String getContent() {
         return content;
     }
@@ -170,4 +174,5 @@ public class Message {
         SYSTEM
     }
 }
+
 

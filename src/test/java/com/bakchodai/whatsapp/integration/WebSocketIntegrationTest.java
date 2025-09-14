@@ -22,6 +22,7 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -170,7 +171,7 @@ public class WebSocketIntegrationTest {
         // Given
         CountDownLatch latch = new CountDownLatch(2); // Welcome + join confirmation
         String[] receivedMessages = new String[2];
-        int messageIndex = 0;
+        final int[] messageIndex = {0}; // Use array to make it effectively final
         
         StandardWebSocketClient client = new StandardWebSocketClient();
         String uri = "ws://localhost:" + port + "/ws";
@@ -186,9 +187,9 @@ public class WebSocketIntegrationTest {
             
             @Override
             public void handleMessage(WebSocketSession session, org.springframework.web.socket.WebSocketMessage<?> message) throws Exception {
-                if (messageIndex < receivedMessages.length) {
-                    receivedMessages[messageIndex] = (String) message.getPayload();
-                    messageIndex++;
+                if (messageIndex[0] < receivedMessages.length) {
+                    receivedMessages[messageIndex[0]] = (String) message.getPayload();
+                    messageIndex[0]++;
                 }
                 latch.countDown();
             }
@@ -222,7 +223,7 @@ public class WebSocketIntegrationTest {
         // Given
         CountDownLatch latch = new CountDownLatch(2); // Welcome + pong
         String[] receivedMessages = new String[2];
-        int messageIndex = 0;
+        final int[] messageIndex = {0};
         
         StandardWebSocketClient client = new StandardWebSocketClient();
         String uri = "ws://localhost:" + port + "/ws";
@@ -238,9 +239,9 @@ public class WebSocketIntegrationTest {
             
             @Override
             public void handleMessage(WebSocketSession session, org.springframework.web.socket.WebSocketMessage<?> message) throws Exception {
-                if (messageIndex < receivedMessages.length) {
-                    receivedMessages[messageIndex] = (String) message.getPayload();
-                    messageIndex++;
+                if (messageIndex[0] < receivedMessages.length) {
+                    receivedMessages[messageIndex[0]] = (String) message.getPayload();
+                    messageIndex[0]++;
                 }
                 latch.countDown();
             }
@@ -274,7 +275,7 @@ public class WebSocketIntegrationTest {
         // Given
         CountDownLatch latch = new CountDownLatch(2); // Welcome + broadcast
         String[] receivedMessages = new String[2];
-        int messageIndex = 0;
+        final int[] messageIndex = {0};
         
         StandardWebSocketClient client = new StandardWebSocketClient();
         String uri = "ws://localhost:" + port + "/ws";
@@ -301,9 +302,9 @@ public class WebSocketIntegrationTest {
             
             @Override
             public void handleMessage(WebSocketSession session, org.springframework.web.socket.WebSocketMessage<?> message) throws Exception {
-                if (messageIndex < receivedMessages.length) {
-                    receivedMessages[messageIndex] = (String) message.getPayload();
-                    messageIndex++;
+                if (messageIndex[0] < receivedMessages.length) {
+                    receivedMessages[messageIndex[0]] = (String) message.getPayload();
+                    messageIndex[0]++;
                 }
                 latch.countDown();
             }
@@ -337,7 +338,7 @@ public class WebSocketIntegrationTest {
         // Given
         CountDownLatch latch = new CountDownLatch(2); // Welcome + status
         String[] receivedMessages = new String[2];
-        int messageIndex = 0;
+        final int[] messageIndex = {0};
         
         StandardWebSocketClient client = new StandardWebSocketClient();
         String uri = "ws://localhost:" + port + "/ws";
@@ -363,9 +364,9 @@ public class WebSocketIntegrationTest {
             
             @Override
             public void handleMessage(WebSocketSession session, org.springframework.web.socket.WebSocketMessage<?> message) throws Exception {
-                if (messageIndex < receivedMessages.length) {
-                    receivedMessages[messageIndex] = (String) message.getPayload();
-                    messageIndex++;
+                if (messageIndex[0] < receivedMessages.length) {
+                    receivedMessages[messageIndex[0]] = (String) message.getPayload();
+                    messageIndex[0]++;
                 }
                 latch.countDown();
             }
@@ -399,7 +400,7 @@ public class WebSocketIntegrationTest {
         // Given
         CountDownLatch latch = new CountDownLatch(2); // Welcome + error
         String[] receivedMessages = new String[2];
-        int messageIndex = 0;
+        final int[] messageIndex = {0};
         
         StandardWebSocketClient client = new StandardWebSocketClient();
         String uri = "ws://localhost:" + port + "/ws";
@@ -414,9 +415,9 @@ public class WebSocketIntegrationTest {
             
             @Override
             public void handleMessage(WebSocketSession session, org.springframework.web.socket.WebSocketMessage<?> message) throws Exception {
-                if (messageIndex < receivedMessages.length) {
-                    receivedMessages[messageIndex] = (String) message.getPayload();
-                    messageIndex++;
+                if (messageIndex[0] < receivedMessages.length) {
+                    receivedMessages[messageIndex[0]] = (String) message.getPayload();
+                    messageIndex[0]++;
                 }
                 latch.countDown();
             }
@@ -473,4 +474,6 @@ public class WebSocketIntegrationTest {
         public String type = "ping";
     }
 }
+
+
 
