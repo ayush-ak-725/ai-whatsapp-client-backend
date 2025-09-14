@@ -132,11 +132,10 @@
             <scope>test</scope>
         </dependency>
         
-        <!-- WebSocket Testing -->
+        <!-- Spring WebSocket API (ensure compile-time availability) -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-websocket</artifactId>
-            <scope>test</scope>
         </dependency>
         
         <!-- Test Containers -->

@@ -1,34 +1,32 @@
 package com.bakchodai.whatsapp.config;
 
-// import com.bakchodai.whatsapp.websocket.ChatWebSocketHandler;
-// import org.springframework.beans.factory.annotation.Autowired;
+import com.bakchodai.whatsapp.websocket.ChatWebSocketHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-// import org.springframework.web.socket.config.annotation.EnableWebSocket;
-// import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
-// import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 /**
  * WebSocket configuration for real-time chat communication
  * 
  * This configuration enables WebSocket support for real-time message updates
  * and conversation management.
- * 
- * Temporarily disabled to fix compilation issues
  */
 @Configuration
-// @EnableWebSocket
-public class WebSocketConfig /* implements WebSocketConfigurer */ {
+@EnableWebSocket
+public class WebSocketConfig implements WebSocketConfigurer {
     
-    // private final ChatWebSocketHandler chatWebSocketHandler;
+    private final ChatWebSocketHandler chatWebSocketHandler;
     
-    // @Autowired
-    // public WebSocketConfig(ChatWebSocketHandler chatWebSocketHandler) {
-    //     this.chatWebSocketHandler = chatWebSocketHandler;
-    // }
+    @Autowired
+    public WebSocketConfig(ChatWebSocketHandler chatWebSocketHandler) {
+        this.chatWebSocketHandler = chatWebSocketHandler;
+    }
     
-    // @Override
-    // public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-    //     registry.addHandler(chatWebSocketHandler, "/ws")
-    //             .setAllowedOrigins("*"); // Configure CORS as needed
-    // }
+    @Override
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(chatWebSocketHandler, "/ws")
+                .setAllowedOrigins("*");
+    }
 }
