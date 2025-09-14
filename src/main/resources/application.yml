@@ -3,9 +3,9 @@ spring:
     name: bakchod-ai-whatsapp-backend
   
   datasource:
-    url: jdbc:postgresql://ep-icy-heart-a1l0hjcj-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
-    username: neondb_owner
-    password: npg_cuflOZo1imq7
+    url: jdbc:postgresql://dpg-d330rkripnbc73dja8t0-a.oregon-postgres.render.com:5432/ai_assistant_whatsapp_db
+    username: aka725
+    password: WsKFJYoWqjGnwtULA3MHDQOYbUxIwtmz
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 20
