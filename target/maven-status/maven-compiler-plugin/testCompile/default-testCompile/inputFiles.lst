@@ -1,0 +1,9 @@
+/workspace/src/test/java/com/bakchodai/whatsapp/integration/IntegrationTestSuite.java
+/workspace/src/test/java/com/bakchodai/whatsapp/integration/ConversationEngineIntegrationTest.java
+/workspace/src/test/java/com/bakchodai/whatsapp/integration/CharacterControllerIntegrationTest.java
+/workspace/src/test/java/com/bakchodai/whatsapp/integration/GroupControllerIntegrationTest.java
+/workspace/src/test/java/com/bakchodai/whatsapp/integration/AIConnectorIntegrationTest.java
+/workspace/src/test/java/com/bakchodai/whatsapp/integration/WebSocketIntegrationTest.java
+/workspace/src/test/java/com/bakchodai/whatsapp/config/TestConfig.java
+/workspace/src/test/java/com/bakchodai/whatsapp/integration/TestContainersIntegrationTest.java
+/workspace/src/test/java/com/bakchodai/whatsapp/integration/PerformanceIntegrationTest.java
