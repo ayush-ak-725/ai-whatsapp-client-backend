@@ -236,7 +236,7 @@ public class GroupService {
      */
     @Transactional(readOnly = true)
     public Page<Message> getGroupMessages(UUID groupId, Pageable pageable) {
-        return messageRepository.findByGroupIdOrderByTimestampDesc(groupId, pageable);
+        return messageRepository.findByGroupIdOrderByTimestampAsc(groupId, pageable);
     }
     
     /**

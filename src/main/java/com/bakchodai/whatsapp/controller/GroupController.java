@@ -3,6 +3,7 @@ package com.bakchodai.whatsapp.controller;
 import com.bakchodai.whatsapp.domain.model.Character;
 import com.bakchodai.whatsapp.domain.model.Group;
 import com.bakchodai.whatsapp.domain.model.Message;
+import com.bakchodai.whatsapp.dto.MessageResponseDTO;
 import com.bakchodai.whatsapp.service.GroupService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -222,26 +223,32 @@ public class GroupController {
      * Get group messages
      */
     @GetMapping("/{groupId}/messages")
-    public ResponseEntity<Page<Message>> getGroupMessages(@PathVariable UUID groupId,
+    public ResponseEntity<Page<MessageResponseDTO>> getGroupMessages(@PathVariable UUID groupId,
                                                         @RequestParam(defaultValue = "0") int page,
                                                         @RequestParam(defaultValue = "20") int size) {
         logger.info("Fetching messages for group: {} (page: {}, size: {})", groupId, page, size);
         
         Pageable pageable = PageRequest.of(page, size);
         Page<Message> messages = groupService.getGroupMessages(groupId, pageable);
-        return ResponseEntity.ok(messages);
+        
+        // Convert to DTO
+        Page<MessageResponseDTO> messageDTOs = messages.map(MessageResponseDTO::new);
+        return ResponseEntity.ok(messageDTOs);
     }
     
     /**
      * Get recent messages
      */
     @GetMapping("/{groupId}/messages/recent")
-    public ResponseEntity<List<Message>> getRecentMessages(@PathVariable UUID groupId,
+    public ResponseEntity<List<MessageResponseDTO>> getRecentMessages(@PathVariable UUID groupId,
                                                          @RequestParam(defaultValue = "10") int limit) {
         logger.info("Fetching recent messages for group: {} (limit: {})", groupId, limit);
         
         List<Message> messages = groupService.getRecentMessages(groupId, limit);
-        return ResponseEntity.ok(messages);
+        List<MessageResponseDTO> messageDTOs = messages.stream()
+                .map(MessageResponseDTO::new)
+                .toList();
+        return ResponseEntity.ok(messageDTOs);
     }
     
     // Request/Response DTOs

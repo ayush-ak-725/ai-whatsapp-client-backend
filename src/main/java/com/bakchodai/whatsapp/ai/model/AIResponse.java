@@ -1,6 +1,8 @@
 package com.bakchodai.whatsapp.ai.model;
 
 import com.bakchodai.whatsapp.domain.model.Message;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -12,15 +14,23 @@ import java.util.Map;
  * the generation process, confidence scores, and additional context.
  */
 public class AIResponse {
-    
+    @JsonProperty("content")
     private String content;
+    @JsonProperty("message_type")
     private Message.MessageType messageType;
+    @JsonProperty("confidence")
     private Double confidence;
+    @JsonProperty("model_used")
     private String modelUsed;
+    @JsonProperty("response_time_ms")
     private Long responseTimeMs;
+    @JsonProperty("generated_at")
     private LocalDateTime generatedAt;
+    @JsonProperty("metadata")
     private Map<String, Object> metadata;
+    @JsonProperty("is_interruption")
     private boolean isInterruption;
+    @JsonProperty("reasoning")
     private String reasoning;
     
     // Constructors

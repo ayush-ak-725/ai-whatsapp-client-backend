@@ -89,6 +89,7 @@ public class ConversationEngine {
      */
     @Async
     public CompletableFuture<Void> processConversationTurn(UUID groupId) {
+        logger.info("Processing conversation turn for group: {}", groupId);
         ConversationState state = activeConversations.get(groupId);
         if (state == null || !state.isActive()) {
             logger.debug("No active conversation found for group: {}", groupId);
@@ -97,6 +98,8 @@ public class ConversationEngine {
         
         Group group = state.getGroup();
         Character currentCharacter = state.getCurrentCharacter();
+        logger.info("Current character for turn {}: {} (group: {})", 
+                   state.getTurnNumber(), currentCharacter.getName(), group.getName());
         
         try {
             // Build conversation context
@@ -106,10 +109,14 @@ public class ConversationEngine {
             CompletableFuture<AIResponse> responseFuture = generateAIResponse(context);
             
             return responseFuture.thenCompose(response -> {
+                logger.info("Received AI response for group {}: content='{}', valid={}", 
+                           groupId, response != null ? response.getContent() : "null", 
+                           response != null ? response.isValid() : false);
+                
                 if (response != null && response.isValid()) {
                     return saveAndProcessResponse(group, currentCharacter, response, state);
                 } else {
-                    logger.warn("Invalid AI response received for group: {}", groupId);
+                    logger.warn("Invalid AI response received for group: {} - response: {}", groupId, response);
                     return CompletableFuture.completedFuture(null);
                 }
             }).thenCompose(v -> {
@@ -160,19 +167,31 @@ public class ConversationEngine {
      * Generate AI response using available connectors
      */
     private CompletableFuture<AIResponse> generateAIResponse(ConversationContext context) {
+        logger.debug("Attempting to generate AI response with {} connectors", aiConnectors.size());
+        
         for (AIConnector connector : aiConnectors) {
             try {
+                logger.debug("Checking health of connector: {}", connector.getConnectorName());
                 CompletableFuture<Boolean> healthCheck = connector.isHealthy();
-                if (healthCheck.get(5, TimeUnit.SECONDS)) {
-                    logger.debug("Using AI connector: {}", connector.getConnectorName());
-                    return connector.generateResponse(context);
+                Boolean isHealthy = healthCheck.get(5, TimeUnit.SECONDS);
+                
+                if (Boolean.TRUE.equals(isHealthy)) {
+                    logger.info("Using healthy AI connector: {}", connector.getConnectorName());
+                    return connector.generateResponse(context)
+                            .exceptionally(throwable -> {
+                                logger.error("Error generating response from connector {}: {}", 
+                                           connector.getConnectorName(), throwable.getMessage());
+                                return createFallbackResponse();
+                            });
+                } else {
+                    logger.warn("AI connector {} is not healthy", connector.getConnectorName());
                 }
             } catch (Exception e) {
-                logger.warn("AI connector {} is not healthy: {}", connector.getConnectorName(), e.getMessage());
+                logger.warn("AI connector {} health check failed: {}", connector.getConnectorName(), e.getMessage());
             }
         }
         
-        logger.error("No healthy AI connectors available");
+        logger.warn("No healthy AI connectors available, using fallback response");
         return CompletableFuture.completedFuture(createFallbackResponse());
     }
     
@@ -180,11 +199,14 @@ public class ConversationEngine {
      * Save AI response and process it
      */
     private CompletableFuture<Void> saveAndProcessResponse(Group group, Character character, AIResponse response, ConversationState state) {
+        logger.info("Saving AI response from {}: '{}'", character.getName(), response.getContent());
+        
         Message message = new Message(group, character, response.getContent(), response.getMessageType());
         message.setIsAiGenerated(true);
         message.setResponseTimeMs(response.getResponseTimeMs());
         
-        messageRepository.save(message);
+        Message savedMessage = messageRepository.save(message);
+        logger.info("Saved message with ID: {} for group: {}", savedMessage.getId(), group.getId());
         
         // Update conversation state
         state.incrementTurnNumber();
@@ -193,7 +215,7 @@ public class ConversationEngine {
         // Update conversation mood based on response
         updateConversationMood(state, response);
         
-        logger.debug("Saved AI response from {}: {}", character.getName(), response.getTruncatedContent(50));
+        logger.info("Successfully processed AI response from {}: {}", character.getName(), response.getTruncatedContent(50));
         
         return CompletableFuture.completedFuture(null);
     }
@@ -205,10 +227,17 @@ public class ConversationEngine {
         // Calculate delay based on conversation state and character personality
         long delayMs = calculateTurnDelay(state);
         
+        logger.info("Scheduling next turn for group {} in {}ms (turn number: {})", 
+                   groupId, delayMs, state.getTurnNumber());
+        
         CompletableFuture.delayedExecutor(delayMs, java.util.concurrent.TimeUnit.MILLISECONDS)
                 .execute(() -> {
                     if (activeConversations.containsKey(groupId)) {
+                        logger.info("Executing scheduled turn for group {} (turn number: {})", 
+                                   groupId, state.getTurnNumber());
                         processConversationTurn(groupId);
+                    } else {
+                        logger.warn("Conversation {} no longer active, skipping scheduled turn", groupId);
                     }
                 });
         
@@ -259,10 +288,28 @@ public class ConversationEngine {
      */
     private AIResponse createFallbackResponse() {
         AIResponse response = new AIResponse();
-        response.setContent("Hmm, let me think about that...");
+        
+        // More engaging fallback messages
+        String[] fallbackMessages = {
+            "Hmm, let me think about that...",
+            "That's an interesting point! Let me process this...",
+            "I'm having a bit of trouble connecting to my thoughts right now, but I'm still here!",
+            "Give me a moment to gather my thoughts...",
+            "I'm processing this conversation, but my AI brain seems to be taking a coffee break!",
+            "Let me think about this more carefully...",
+            "I'm here, just need a moment to think through this properly."
+        };
+        
+        // Randomly select a fallback message
+        String selectedMessage = fallbackMessages[new java.util.Random().nextInt(fallbackMessages.length)];
+        
+        response.setContent(selectedMessage);
         response.setConfidence(0.1);
         response.setModelUsed("fallback");
         response.setResponseTimeMs(0L);
+        response.setMessageType(Message.MessageType.TEXT);
+        
+        logger.info("Created fallback response: {}", selectedMessage);
         return response;
     }
     

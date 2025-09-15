@@ -43,6 +43,16 @@ ai:
     url: http://localhost:8000
     timeout: 30000
     retry-attempts: 3
+    health-check-timeout: 5000
+    enable-fallback: true
+    fallback-messages:
+      - "Hmm, let me think about that..."
+      - "That's an interesting point! Let me process this..."
+      - "I'm having a bit of trouble connecting to my thoughts right now, but I'm still here!"
+      - "Give me a moment to gather my thoughts..."
+      - "I'm processing this conversation, but my AI brain seems to be taking a coffee break!"
+      - "Let me think about this more carefully..."
+      - "I'm here, just need a moment to think through this properly."
 
 # Logging Configuration
 logging:

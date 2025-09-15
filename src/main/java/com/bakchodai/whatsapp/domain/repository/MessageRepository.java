@@ -21,32 +21,32 @@ import java.util.UUID;
 public interface MessageRepository extends JpaRepository<Message, UUID> {
     
     /**
-     * Find messages by group ID, ordered by timestamp
+     * Find messages by group ID, ordered by timestamp (oldest first for chat UI)
      * 
      * @param groupId Group ID
      * @param pageable Pagination information
      * @return Page of messages for the group
      */
-    Page<Message> findByGroupIdOrderByTimestampDesc(UUID groupId, Pageable pageable);
+    Page<Message> findByGroupIdOrderByTimestampAsc(UUID groupId, Pageable pageable);
     
     /**
-     * Find recent messages by group ID
+     * Find recent messages by group ID (oldest first for chat UI)
      * 
      * @param groupId Group ID
      * @param pageable Pagination information
      * @return List of recent messages
      */
-    @Query("SELECT m FROM Message m WHERE m.group.id = :groupId ORDER BY m.timestamp DESC")
+    @Query("SELECT m FROM Message m WHERE m.group.id = :groupId ORDER BY m.timestamp ASC")
     List<Message> findRecentMessagesByGroupId(@Param("groupId") UUID groupId, Pageable pageable);
     
     /**
-     * Find recent messages by group ID with limit
+     * Find recent messages by group ID with limit (oldest first for chat UI)
      * 
      * @param groupId Group ID
      * @param limit Maximum number of messages
      * @return List of recent messages
      */
-    @Query(value = "SELECT * FROM messages WHERE group_id = :groupId ORDER BY timestamp DESC LIMIT :limit", nativeQuery = true)
+    @Query(value = "SELECT * FROM messages WHERE group_id = :groupId ORDER BY timestamp ASC LIMIT :limit", nativeQuery = true)
     List<Message> findRecentMessagesByGroupIdWithLimit(@Param("groupId") UUID groupId, @Param("limit") int limit);
     
     /**
