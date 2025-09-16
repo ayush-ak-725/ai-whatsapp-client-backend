@@ -29,13 +29,14 @@ public class HttpAIConnector implements AIConnector {
 
     public HttpAIConnector(
             ObjectMapper objectMapper,
-            @Value("${ai.backend.url:http://localhost:8000}") String aiBackendUrl) {
+            @Value("${ai.backend.url}") String aiBackendUrl) {
         this.httpClient = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_1_1)  // Force HTTP/1.1
                 .connectTimeout(Duration.ofSeconds(5))
                 .build();
         this.objectMapper = objectMapper;
         this.aiBackendUrl = aiBackendUrl;
+        logger.info("AI Backend URL: {}", aiBackendUrl);
     }
 
     @Override

@@ -19,7 +19,7 @@ public class AIConnectorConfig {
     
     @Bean
     public AIConnector httpAIConnector(ObjectMapper objectMapper, 
-                                     @Value("${ai.backend.url:http://localhost:8000}") String aiBackendUrl) {
+                                     @Value("${ai.backend.url}") String aiBackendUrl) {
         logger.info("Creating HttpAIConnector bean with URL: {}", aiBackendUrl);
         return new HttpAIConnector(objectMapper, aiBackendUrl);
     }

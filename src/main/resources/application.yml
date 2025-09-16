@@ -40,7 +40,7 @@ spring:
 # AI Backend Configuration
 ai:
   backend:
-    url: https://ai-whatsapp-client-ds-1.onrender.com
+    url: https://ai-whatsapp-client-ds-2.onrender.com
     timeout: 30000
     retry-attempts: 3
     health-check-timeout: 5000
@@ -90,13 +90,15 @@ management:
 # WebSocket Configuration
 websocket:
   allowed-origins: "*"
-  message-size-limit: 65536
-  buffer-size-limit: 51200
+  max-text-message-buffer-size: 5120000   # 5 MB
+  max-binary-message-buffer-size: 5120000 # 5 MB
+  message-size-limit: 5120000             # 5 MB
+  buffer-size-limit: 5120000 
 
 # Application specific configuration
 app:
   conversation:
-    max-recent-messages: 20
+    max-recent-messages: 60
     turn-delay-min: 2000
     turn-delay-max: 8000
     max-response-time: 30000
