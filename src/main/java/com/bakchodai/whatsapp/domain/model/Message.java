@@ -53,6 +53,9 @@ public class Message {
     
     @Column(name = "response_time_ms")
     private Long responseTimeMs;
+
+    @Column(name = "next_turn", nullable = true)
+    private String nextTurn = null;
     
     // Constructors
     public Message() {}
@@ -137,6 +140,14 @@ public class Message {
     
     public void setResponseTimeMs(Long responseTimeMs) {
         this.responseTimeMs = responseTimeMs;
+    }
+
+    public String getNextTurn() {
+        return nextTurn;
+    }
+
+    public void setNextTurn(String nextTurn) {
+        this.nextTurn = nextTurn;
     }
     
     @Override

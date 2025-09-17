@@ -198,12 +198,14 @@ public class ConversationEngine {
     /**
      * Save AI response and process it
      */
-    private CompletableFuture<Void> saveAndProcessResponse(Group group, Character character, AIResponse response, ConversationState state) {
+    private CompletableFuture<Void> saveAndProcessResponse(Group group, Character character, AIResponse response, 
+                                                    ConversationState state) {
         logger.info("Saving AI response from {}: '{}'", character.getName(), response.getContent());
         
         Message message = new Message(group, character, response.getContent(), response.getMessageType());
         message.setIsAiGenerated(true);
         message.setResponseTimeMs(response.getResponseTimeMs());
+        message.setNextTurn(state.getCurrentCharacter().getName());
         
         Message savedMessage = messageRepository.save(message);
         logger.info("Saved message with ID: {} for group: {}", savedMessage.getId(), group.getId());
