@@ -21,6 +21,7 @@ public class MessageResponseDTO {
     private LocalDateTime timestamp;
     private Boolean isAiGenerated;
     private Long responseTimeMs;
+    private String nextTurn;
     
     // Constructors
     public MessageResponseDTO() {}
@@ -36,6 +37,7 @@ public class MessageResponseDTO {
         this.timestamp = message.getTimestamp();
         this.isAiGenerated = message.getIsAiGenerated();
         this.responseTimeMs = message.getResponseTimeMs();
+        this.nextTurn = message.getNextTurn();
     }
     
     // Getters and Setters
@@ -69,4 +71,6 @@ public class MessageResponseDTO {
     
     public Long getResponseTimeMs() { return responseTimeMs; }
     public void setResponseTimeMs(Long responseTimeMs) { this.responseTimeMs = responseTimeMs; }
+
+    public String getNextTurn() { return nextTurn; }
 }

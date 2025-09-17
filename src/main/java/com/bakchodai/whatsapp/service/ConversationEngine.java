@@ -205,7 +205,6 @@ public class ConversationEngine {
         Message message = new Message(group, character, response.getContent(), response.getMessageType());
         message.setIsAiGenerated(true);
         message.setResponseTimeMs(response.getResponseTimeMs());
-        message.setNextTurn(state.getCurrentCharacter().getName());
         
         Message savedMessage = messageRepository.save(message);
         logger.info("Saved message with ID: {} for group: {}", savedMessage.getId(), group.getId());
@@ -213,6 +212,8 @@ public class ConversationEngine {
         // Update conversation state
         state.incrementTurnNumber();
         state.setLastMessageTime(LocalDateTime.now());
+        savedMessage.setNextTurn(state.getCurrentCharacter().getName());
+        Message updatedMessageWithNextTurn = messageRepository.save(savedMessage);
         
         // Update conversation mood based on response
         updateConversationMood(state, response);

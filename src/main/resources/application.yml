@@ -2,10 +2,11 @@ spring:
   application:
     name: bakchod-ai-whatsapp-backend
 
+
   datasource:
-    url: jdbc:postgresql://dpg-d33vvnje5dus73eje2e0-a.oregon-postgres.render.com:5432/ai_assistant_prod
-    username: ai_assistant_prod_user
-    password: 8w4jMiuWTc9HdAabhDUswGiAWn03JxXl
+    url: jdbc:postgresql://dpg-d357kaogjchc73et9qjg-a.oregon-postgres.render.com:5432/ai_assistant_whatsapp_test
+    username: ai_assistant_whatsapp_test_user
+    password: EBjRiJduyJB67TEvLxp34cZuh5WizVRC
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 20
@@ -90,15 +91,15 @@ management:
 # WebSocket Configuration
 websocket:
   allowed-origins: "*"
-  max-text-message-buffer-size: 5120000   # 5 MB
-  max-binary-message-buffer-size: 5120000 # 5 MB
+  # max-text-message-buffer-size: 5120000   # 5 MB
+  # max-binary-message-buffer-size: 5120000 # 5 MB
   message-size-limit: 5120000             # 5 MB
   buffer-size-limit: 5120000 
 
 # Application specific configuration
 app:
   conversation:
-    max-recent-messages: 60
+    max-recent-messages: 
     turn-delay-min: 2000
     turn-delay-max: 8000
     max-response-time: 30000
