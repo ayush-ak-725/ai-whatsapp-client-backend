@@ -2,11 +2,10 @@ spring:
   application:
     name: bakchod-ai-whatsapp-backend
 
-
   datasource:
-    url: jdbc:postgresql://dpg-d357kaogjchc73et9qjg-a.oregon-postgres.render.com:5432/ai_assistant_whatsapp_test
-    username: ai_assistant_whatsapp_test_user
-    password: EBjRiJduyJB67TEvLxp34cZuh5WizVRC
+    url: jdbc:postgresql://dpg-d35bkcj3fgac73batsog-a.oregon-postgres.render.com:5432/ai_assistant_whatsapp_stage
+    username: ai_assistant_whatsapp_stage_user
+    password: iI9lbvIgenu3OKkDR3zlmRBAvvPKq7Do
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 20
@@ -41,7 +40,7 @@ spring:
 # AI Backend Configuration
 ai:
   backend:
-    url: https://ai-whatsapp-client-ds-2.onrender.com
+    url: https://ai-whatsapp-client-ds-3.onrender.com
     timeout: 30000
     retry-attempts: 3
     health-check-timeout: 5000
