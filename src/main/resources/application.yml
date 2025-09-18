@@ -40,7 +40,7 @@ spring:
 # AI Backend Configuration
 ai:
   backend:
-    url: https://ai-whatsapp-client-ds-3.onrender.com
+    url: https://ai-whatsapp-client-ds-4.onrender.com
     timeout: 30000
     retry-attempts: 3
     health-check-timeout: 5000
