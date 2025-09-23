@@ -40,7 +40,7 @@ spring:
 # AI Backend Configuration
 ai:
   backend:
-    url: ai-whatsapp-client-ds.railway.internal
+    url: https://ai-whatsapp-client-ds-production.up.railway.app
     timeout: 30000
     retry-attempts: 3
     health-check-timeout: 5000
